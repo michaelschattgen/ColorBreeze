@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         InitializeControls();
+        UserGrantedPermission();
 
         headerTextView.setText(String.format("Hey %s, this is Color Breeze", getEmojiByUnicode(wavingHandEmojiUnicode)));
         checkPermissionButton.setOnClickListener(new View.OnClickListener() {
@@ -46,9 +47,11 @@ public class MainActivity extends AppCompatActivity {
         {
             enableGrayscaleSwitch.setVisibility(View.VISIBLE);
             subheaderTextView.setText(R.string.subheader_has_permission);
+            checkPermissionButton.setText(getResources().getString(R.string.button_has_permission));
         } else {
             subheaderTextView.setText(R.string.subheader_no_permission);
             enableGrayscaleSwitch.setVisibility(View.INVISIBLE);
+            checkPermissionButton.setText(getResources().getString(R.string.button_no_permission));
         }
 
         return grantedPermission;

@@ -8,6 +8,13 @@
         It looks like you did not give this app permission to the "Secure Settings" of your Android Device. Color Breeze needs this in order to remove the colors of your screen.
     </string>
 
+    <string name="button_has_permission">
+        Settings
+    </string>
+    <string name="button_no_permission">
+        Check Permission Status
+    </string>
+
     <!-- Strings related to Settings -->
 
     <!-- Example General settings -->
