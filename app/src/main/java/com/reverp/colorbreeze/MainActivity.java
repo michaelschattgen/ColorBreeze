@@ -6,9 +6,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
+import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import mehdi.sakout.fancybuttons.FancyButton;
 
@@ -16,7 +15,9 @@ public class MainActivity extends AppCompatActivity {
     int wavingHandEmojiUnicode = 0x1F44B;
 
     TextView headerTextView;
+    TextView subheaderTextView;
     FancyButton checkPermissionButton;
+    Switch enableGrayscaleSwitch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,26 +30,36 @@ public class MainActivity extends AppCompatActivity {
         checkPermissionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CheckPermission();
+                if(UserGrantedPermission())
+                {
+
+                }
             }
         });
     }
 
-    public void CheckPermission()
+    public boolean UserGrantedPermission()
     {
         int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_SECURE_SETTINGS);
-        if(permissionCheck == PackageManager.PERMISSION_GRANTED)
+        boolean grantedPermission = permissionCheck == PackageManager.PERMISSION_GRANTED;
+        if(grantedPermission)
         {
-            Toast.makeText(this, "Success!", Toast.LENGTH_LONG).show();
+            enableGrayscaleSwitch.setVisibility(View.VISIBLE);
+            subheaderTextView.setText(R.string.subheader_has_permission);
         } else {
-            Toast.makeText(this, "nope :(", Toast.LENGTH_LONG).show();
+            subheaderTextView.setText(R.string.subheader_no_permission);
+            enableGrayscaleSwitch.setVisibility(View.INVISIBLE);
         }
+
+        return grantedPermission;
     }
 
     public void InitializeControls()
     {
         headerTextView = findViewById(R.id.tvHeader);
+        subheaderTextView = findViewById(R.id.tvSubheader);
         checkPermissionButton = findViewById(R.id.btnCheckPermission);
+        enableGrayscaleSwitch = findViewById(R.id.swEnableGrayscale);
     }
 
     public String getEmojiByUnicode(int unicode){

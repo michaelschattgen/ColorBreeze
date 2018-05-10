@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Color Breeze</string>
+    <string name="title_activity_settings">Settings</string>
+    <string name="subheader_has_permission">
+        Successfully granted permission to the "Secure Settings" of your Device. Enable grayscale with the switch below or set a specific time in the settings.
+    </string>
+    <string name="subheader_no_permission">
+        It looks like you did not give this app permission to the "Secure Settings" of your Android Device. Color Breeze needs this in order to remove the colors of your screen.
+    </string>
 </resources>
