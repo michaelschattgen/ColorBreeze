@@ -5,10 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#f4f6f8"
-    android:layout_marginStart="14dp"
-    android:layout_marginLeft="14dp"
-    android:layout_marginRight="14dp"
-    android:layout_marginEnd="14dp"
+    android:padding="14dp"
     tools:context="com.reverp.colorbreeze.MainActivity">
 
     <TextView
@@ -17,16 +14,15 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="Hey , this is Color Breeze"
-        android:textSize="24sp"
         android:textAlignment="center"
-        android:textStyle="bold"
         android:textColor="#000000"
+        android:textSize="24sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.296" />
+        app:layout_constraintVertical_bias="0.346" />
 
     <TextView
         android:id="@+id/tvSubheader"
@@ -34,16 +30,30 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
         android:gravity="center"
-        android:textColor="#303030"
+        android:lineSpacingExtra="5sp"
         android:text="It looks like you didn't give this app permission to the 'Secure Settings' of your Android Device. Color Breeze needs this in order to remove the colors of your screen."
         android:textAlignment="center"
+        android:textColor="#303030"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvHeader"
-        app:layout_constraintVertical_bias="0.296"/>
+        app:layout_constraintTop_toBottomOf="@id/tvHeader" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="81dp"
+        android:layout_height="92dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="104dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_ink" />
 
 </android.support.constraint.ConstraintLayout>
