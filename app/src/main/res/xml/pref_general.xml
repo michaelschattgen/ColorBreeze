@@ -2,32 +2,33 @@
 
     <SwitchPreference
         android:defaultValue="true"
-        android:key="example_switch"
-        android:summary="@string/pref_description_social_recommendations"
-        android:title="@string/pref_title_social_recommendations" />
+        android:key="enable_switch"
+        android:summary="@string/pref_description_enable_auto"
+        android:title="@string/pref_title_enable_auto" />
 
     <!-- NOTE: EditTextPreference accepts EditText attributes. -->
     <!-- NOTE: EditTextPreference's summary should be set to its value by the activity code. -->
-    <EditTextPreference
-        android:capitalize="words"
-        android:defaultValue="@string/pref_default_display_name"
-        android:inputType="textCapWords"
-        android:key="example_text"
-        android:maxLines="1"
+    <Preference
+        android:key="pref_start_time"
         android:selectAllOnFocus="true"
         android:singleLine="true"
-        android:title="@string/pref_title_display_name" />
+        android:summary="No time set"
+        android:title="Bedtime" />
 
-    <!-- NOTE: Hide buttons to simplify the UI. Users can touch outside the dialog to
-         dismiss it. -->
-    <!-- NOTE: ListPreference's summary should be set to its value by the activity code. -->
-    <ListPreference
-        android:defaultValue="-1"
-        android:entries="@array/pref_example_list_titles"
-        android:entryValues="@array/pref_example_list_values"
-        android:key="example_list"
-        android:negativeButtonText="@null"
-        android:positiveButtonText="@null"
-        android:title="@string/pref_title_add_friends_to_messages" />
+    <Preference
+        android:key="pref_stop_time"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:summary="No time set"
+        android:title="Wake up time" />
+
+
+    <MultiSelectListPreference
+        android:defaultValue="@array/multi_select_list_preference_default_value"
+        android:entries="@array/list_preference_entries"
+        android:entryValues="@array/list_preference_entries"
+        android:key="multi_select_list_preference_1"
+        android:title="Select days" />
+
 
 </PreferenceScreen>

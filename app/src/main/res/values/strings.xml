@@ -20,9 +20,9 @@
     <!-- Example General settings -->
     <string name="pref_header_general">General</string>
 
-    <string name="pref_title_social_recommendations">Enable social recommendations</string>
-    <string name="pref_description_social_recommendations">Recommendations for people to contact
-        based on your message history
+    <string name="pref_title_enable_auto">Enable auto Color Breeze</string>
+    <string name="pref_description_enable_auto">Automatically turn on Color Breeze on times
+        specified by you
     </string>
 
     <string name="pref_title_display_name">Display name</string>
@@ -62,15 +62,23 @@
     </string-array>
 
     <string-array name="list_preference_entries">
-        <item>Entry 1</item>
-        <item>Entry 2</item>
-        <item>Entry 3</item>
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
+        <item>Sunday</item>
     </string-array>
 
     <string-array name="list_preference_entry_values">
         <item>1</item>
         <item>2</item>
         <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
     </string-array>
 
     <string-array name="multi_select_list_preference_default_value" />
