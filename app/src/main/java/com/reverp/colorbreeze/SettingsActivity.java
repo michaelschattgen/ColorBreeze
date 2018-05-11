@@ -51,6 +51,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity{
         SettingsFragment fragment = new SettingsFragment();
         fragment.setArguments(getIntent().getExtras());
         getFragmentManager().beginTransaction().replace(android.R.id.content, fragment).commit();
+
+        final Preference startTimePreference = findPreference("pref_start_time");
     }
 
 
@@ -89,6 +91,10 @@ public class SettingsActivity extends AppCompatPreferenceActivity{
             });
 
             final Preference startTimePreference = findPreference("pref_start_time");
+
+            int startTimeHour = Integer.parseInt(read("starttime_hour", "0"));
+            int startTimeMinute = Integer.parseInt(read("starttime_minute", "0"));
+            startTimePreference.setSummary(getTimeString(startTimeHour, startTimeMinute));
             startTimePreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
@@ -114,6 +120,10 @@ public class SettingsActivity extends AppCompatPreferenceActivity{
             });
 
             final Preference stopTimePreference = findPreference("pref_stop_time");
+
+            int stopTimeHour = Integer.parseInt(read("stoptime_hour", "0"));
+            int stopTimeMinute = Integer.parseInt(read("stoptime_minute", "0"));
+            stopTimePreference.setSummary(getTimeString(stopTimeHour, stopTimeMinute));
             stopTimePreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
