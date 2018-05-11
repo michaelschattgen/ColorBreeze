@@ -12,6 +12,7 @@
         android:key="pref_start_time"
         android:selectAllOnFocus="true"
         android:singleLine="true"
+        android:dependency="enable_switch"
         android:summary="No time set"
         android:title="Bedtime" />
 
@@ -19,6 +20,7 @@
         android:key="pref_stop_time"
         android:selectAllOnFocus="true"
         android:singleLine="true"
+        android:dependency="enable_switch"
         android:summary="No time set"
         android:title="Wake up time" />
 
@@ -27,6 +29,7 @@
         android:defaultValue="@array/multi_select_list_preference_default_value"
         android:entries="@array/list_preference_entries"
         android:entryValues="@array/list_preference_entries"
+        android:dependency="enable_switch"
         android:key="multi_select_list_preference_1"
         android:title="Select days" />
 

@@ -62,6 +62,32 @@ public class SettingsActivity extends AppCompatPreferenceActivity{
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.pref_general);
 
+            final Preference enableAutoGrayscale = findPreference("enable_switch");
+            enableAutoGrayscale.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object o) {
+                    if((boolean)o)
+                    {
+                        setGrayscaleAlarms(getActivity());
+                    }
+                    else
+                    {
+                        AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+                        Intent intent = new Intent(getActivity(), EnableGrayscaleService.class);
+                        PendingIntent pendingIntent = PendingIntent.getService(getActivity(), 0, intent, 0);
+
+                        Intent disableIntent = new Intent(getActivity(), DisableGrayscaleService.class);
+                        PendingIntent disablePendingIntent = PendingIntent.getService(getActivity(), 0, disableIntent, 0);
+
+                        // Reset previous pending intent
+                        alarmManager.cancel(pendingIntent);
+                        alarmManager.cancel(disablePendingIntent);
+                    }
+
+                    return true;
+                }
+            });
+
             final Preference startTimePreference = findPreference("pref_start_time");
             startTimePreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
@@ -76,7 +102,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity{
                             save("starttime_hour", Integer.toString(selectedHour));
                             save("starttime_minute", Integer.toString(selectedMinute));
 
-                            startTimePreference.setSummary(selectedHour + ":" + selectedMinute);
+                            startTimePreference.setSummary(getTimeString(selectedHour, selectedMinute));
                             setGrayscaleAlarms(getActivity().getApplicationContext());
                         }
                     }, hour, minute, true);//Yes 24 hour time
@@ -101,7 +127,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity{
                             save("stoptime_hour", Integer.toString(selectedHour));
                             save("stoptime_minute", Integer.toString(selectedMinute));
 
-                            stopTimePreference.setSummary(selectedHour + ":" + selectedMinute);
+                            stopTimePreference.setSummary(getTimeString(selectedHour, selectedMinute));
                             setGrayscaleAlarms(getActivity().getApplicationContext());
                         }
                     }, hour, minute, true);//Yes 24 hour time
@@ -111,7 +137,23 @@ public class SettingsActivity extends AppCompatPreferenceActivity{
                     return true;
                 }
             });
+        }
 
+        public String getTimeString(int selectedHour, int selectedMinute)
+        {
+            String hourString = Integer.toString(selectedHour);
+            if(selectedHour < 10)
+            {
+                hourString = "0" + hourString;
+            }
+
+            String minuteString = Integer.toString(selectedMinute);
+            if(selectedMinute < 10)
+            {
+                minuteString = "0" + minuteString;
+            }
+
+            return hourString + ":" + minuteString;
         }
 
         public void setGrayscaleAlarms(Context mContext) {
