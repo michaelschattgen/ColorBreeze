@@ -1,9 +1,12 @@
 package com.reverp.colorbreeze;
 
 import android.annotation.TargetApi;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -23,7 +26,9 @@ import android.view.MenuItem;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.sql.Time;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -48,6 +53,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity{
         getFragmentManager().beginTransaction().replace(android.R.id.content, fragment).commit();
     }
 
+
+
     public static class SettingsFragment extends PreferenceFragment {
 
         @Override
@@ -66,7 +73,11 @@ public class SettingsActivity extends AppCompatPreferenceActivity{
                     mTimePicker = new TimePickerDialog(getActivity(), new TimePickerDialog.OnTimeSetListener() {
                         @Override
                         public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                            save("starttime_hour", Integer.toString(selectedHour));
+                            save("starttime_minute", Integer.toString(selectedMinute));
+
                             startTimePreference.setSummary(selectedHour + ":" + selectedMinute);
+                            setGrayscaleAlarms(getActivity().getApplicationContext());
                         }
                     }, hour, minute, true);//Yes 24 hour time
                     mTimePicker.setTitle("Select Time");
@@ -76,6 +87,77 @@ public class SettingsActivity extends AppCompatPreferenceActivity{
                 }
             });
 
+            final Preference stopTimePreference = findPreference("pref_stop_time");
+            stopTimePreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    Calendar mcurrentTime = Calendar.getInstance();
+                    int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
+                    int minute = mcurrentTime.get(Calendar.MINUTE);
+                    TimePickerDialog mTimePicker;
+                    mTimePicker = new TimePickerDialog(getActivity(), new TimePickerDialog.OnTimeSetListener() {
+                        @Override
+                        public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                            save("stoptime_hour", Integer.toString(selectedHour));
+                            save("stoptime_minute", Integer.toString(selectedMinute));
+
+                            stopTimePreference.setSummary(selectedHour + ":" + selectedMinute);
+                            setGrayscaleAlarms(getActivity().getApplicationContext());
+                        }
+                    }, hour, minute, true);//Yes 24 hour time
+                    mTimePicker.setTitle("Select Time");
+                    mTimePicker.show();
+
+                    return true;
+                }
+            });
+
+        }
+
+        public void setGrayscaleAlarms(Context mContext) {
+            AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
+            Intent intent = new Intent(mContext, EnableGrayscaleService.class);
+            PendingIntent pendingIntent = PendingIntent.getService(mContext, 0, intent, 0);
+
+            Intent disableIntent = new Intent(mContext, DisableGrayscaleService.class);
+            PendingIntent disablePendingIntent = PendingIntent.getService(mContext, 0, disableIntent, 0);
+
+            // Reset previous pending intent
+            alarmManager.cancel(pendingIntent);
+            alarmManager.cancel(disablePendingIntent);
+
+            // Set the alarm to start at approximately 08:00 morning.
+            Calendar beginCalendar = Calendar.getInstance();
+            beginCalendar.setTimeInMillis(System.currentTimeMillis());
+            beginCalendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(read("starttime_hour", "0")));
+            beginCalendar.set(Calendar.MINUTE, Integer.parseInt(read("starttime_minute", "0")));
+            beginCalendar.set(Calendar.SECOND, 0);
+
+            Calendar endCalendar = Calendar.getInstance();
+            endCalendar.setTimeInMillis(System.currentTimeMillis());
+            endCalendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(read("stoptime_hour", "0")));
+            endCalendar.set(Calendar.MINUTE, Integer.parseInt(read("stoptime_minute", "0")));
+            endCalendar.set(Calendar.SECOND, 0);
+
+            // If the scheduler date is passed, move scheduler time to tomorrow
+            if (System.currentTimeMillis() > beginCalendar.getTimeInMillis()) {
+                beginCalendar.add(Calendar.DAY_OF_YEAR, 1);
+            }
+
+            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, beginCalendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, endCalendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, disablePendingIntent);
+        }
+
+        public void save(String valueKey, String value) {
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+            SharedPreferences.Editor edit = prefs.edit();
+            edit.putString(valueKey, value);
+            edit.apply();
+        }
+
+        public String read(String valueKey, String valueDefault) {
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+            return prefs.getString(valueKey, valueDefault);
         }
     }
 }
