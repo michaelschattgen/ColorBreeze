@@ -24,11 +24,15 @@
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings"></activity>
 
-
         <service
             android:name=".EnableGrayscaleService"
             android:enabled="true"
             android:exported="false" />
+
+        <receiver
+            android:name=".GrayscaleAlarmReceiver"
+            android:process=":remote" >
+        </receiver>
 
         <service
             android:name=".DisableGrayscaleService"
