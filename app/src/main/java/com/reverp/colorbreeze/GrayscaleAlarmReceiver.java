@@ -15,15 +15,14 @@ public class GrayscaleAlarmReceiver extends BroadcastReceiver {
         Intent i = null;
         switch(intent.getAction())
         {
-            case "ENABLE_GRAYSCALE":
+            case ENABLE_GRAYSCALE_CODE:
                 i = new Intent(context, EnableGrayscaleService.class);
                 break;
 
-            case "DISABLE_GRAYSCALE":
+            case DISABLE_GRAYSCALE_CODE:
                 i = new Intent(context, DisableGrayscaleService.class);
         }
 
-        i = new Intent(context, EnableGrayscaleService.class);
         if(i != null)
         {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

@@ -58,6 +58,8 @@ public class MainActivity extends AppCompatActivity {
                     DisableGrayscale();
             }
         });
+
+        enableGrayscaleSwitch.setChecked(IsGrayscaled());
     }
 
     private void CreateNotificationChannel() {

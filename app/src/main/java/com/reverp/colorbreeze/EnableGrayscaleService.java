@@ -2,6 +2,7 @@ package com.reverp.colorbreeze;
 
 import android.app.IntentService;
 import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Build;
@@ -27,22 +28,25 @@ public class EnableGrayscaleService extends JobIntentService {
     @Override
     public void onCreate() {
         //The intent to launch when the user clicks the expanded notification
-        Intent intent = new Intent(this, SomeActivityToLaunch.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        PendingIntent pendIntent = PendingIntent.getActivity(this, 0, intent, 0);
+        Intent intent = new Intent(this, GrayscaleAlarmReceiver.class);
+        intent.setAction(GrayscaleAlarmReceiver.DISABLE_GRAYSCALE_CODE);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
 
         Notification.Builder builder = new Notification.Builder(this)
                 .setContentTitle("Grayscale mode activated")
                 .setContentText("Press here to deactivate and bring back your colors.")
                 .setSmallIcon(R.drawable.ic_ink)
-                .setActions()
+                .setContentIntent(pendingIntent)
                 .setOngoing(true);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             builder.setChannelId("channel1");
         }
 
-        startForeground(1234, builder.build());
+        Notification runningNotification = builder.build();
+        runningNotification.flags |= Notification.FLAG_AUTO_CANCEL;
+
+        startForeground(1, runningNotification);
         Settings.Secure.putInt(getContentResolver(), "accessibility_display_daltonizer", 0);
         Settings.Secure.putInt(getContentResolver(), "accessibility_display_daltonizer_enabled", 1);
 
