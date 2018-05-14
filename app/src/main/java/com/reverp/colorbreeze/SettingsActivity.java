@@ -168,10 +168,12 @@ public class SettingsActivity extends AppCompatPreferenceActivity{
 
         public void setGrayscaleAlarms(Context mContext) {
             AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
-            Intent intent = new Intent(mContext, EnableGrayscaleService.class);
-            PendingIntent pendingIntent = PendingIntent.getService(mContext, 0, intent, 0);
+            Intent intent = new Intent(mContext, GrayscaleAlarmReceiver.class);
+            intent.setAction(GrayscaleAlarmReceiver.ENABLE_GRAYSCALE_CODE);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, 0, intent, 0);
 
-            Intent disableIntent = new Intent(mContext, DisableGrayscaleService.class);
+            Intent disableIntent = new Intent(mContext, GrayscaleAlarmReceiver.class);
+            intent.setAction(GrayscaleAlarmReceiver.DISABLE_GRAYSCALE_CODE);
             PendingIntent disablePendingIntent = PendingIntent.getService(mContext, 0, disableIntent, 0);
 
             // Reset previous pending intent
@@ -195,9 +197,16 @@ public class SettingsActivity extends AppCompatPreferenceActivity{
             if (System.currentTimeMillis() > beginCalendar.getTimeInMillis()) {
                 beginCalendar.add(Calendar.DAY_OF_YEAR, 1);
             }
-
-            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, beginCalendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
-            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, endCalendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, disablePendingIntent);
+            //if (Build.VERSION.SDK_INT >= 23) {
+                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, beginCalendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, endCalendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, disablePendingIntent);
+            //} else if (Build.VERSION.SDK_INT >= 19) {
+            //    alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, beginCalendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+            //} else {
+            //    alarmManager.set(AlarmManager.RTC_WAKEUP, beginCalendar.getTimeInMillis(), pendingIntent);
+            //}
+            //alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, beginCalendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+            //alarmManager.setRepeating (AlarmManager.RTC_WAKEUP, endCalendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, disablePendingIntent);
         }
 
         public void save(String valueKey, String value) {
