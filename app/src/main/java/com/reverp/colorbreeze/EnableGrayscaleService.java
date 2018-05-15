@@ -37,6 +37,7 @@ public class EnableGrayscaleService extends JobIntentService {
                 .setContentText("Press here to deactivate and bring back your colors.")
                 .setSmallIcon(R.drawable.ic_ink)
                 .setContentIntent(pendingIntent)
+                .setAutoCancel(true)
                 .setOngoing(true);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

@@ -28,7 +28,6 @@ public class DisableGrayscaleService extends JobIntentService {
 
     @Override
     public void onCreate() {
-        //The intent to launch when the user clicks the expanded notification
         Notification.Builder builder = new Notification.Builder(this)
                 .setContentTitle("Stopping grayscale mode")
                 .setContentText("Shutting down... Please wait.")
@@ -47,6 +46,11 @@ public class DisableGrayscaleService extends JobIntentService {
         startForeground(1, runningNotification);
 
         Settings.Secure.putInt(getContentResolver(), "accessibility_display_daltonizer_enabled", 0);
+
+        Intent intent = new Intent(this, GrayscaleAlarmReceiver.class);
+        intent.setAction(GrayscaleAlarmReceiver.DISABLE_GRAYSCALE_CODE);
+        sendBroadcast(intent);
+
         //super.onCreate();
 
     }
