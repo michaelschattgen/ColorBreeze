@@ -173,8 +173,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity{
             PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, 0, intent, 0);
 
             Intent disableIntent = new Intent(mContext, GrayscaleAlarmReceiver.class);
-            intent.setAction(GrayscaleAlarmReceiver.DISABLE_GRAYSCALE_CODE);
-            PendingIntent disablePendingIntent = PendingIntent.getService(mContext, 0, disableIntent, 0);
+            disableIntent.setAction(GrayscaleAlarmReceiver.DISABLE_GRAYSCALE_CODE);
+            PendingIntent disablePendingIntent = PendingIntent.getBroadcast(mContext, 0, disableIntent, 0);
 
             // Reset previous pending intent
             alarmManager.cancel(pendingIntent);
