@@ -129,6 +129,8 @@ public class MainActivity extends AppCompatActivity {
     public void DisableGrayscale()
     {
         Settings.Secure.putInt(getContentResolver(), "accessibility_display_daltonizer_enabled", 0);
+        Intent serviceIntent = new Intent(this, EnableGrayscaleService.class);
+        stopService(serviceIntent);
     }
 
     public boolean IsGrayscaled()
