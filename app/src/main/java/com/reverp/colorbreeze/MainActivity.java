@@ -2,6 +2,7 @@ package com.reverp.colorbreeze;
 
 import android.Manifest;
 import android.app.ActivityManager;
+import android.app.AlertDialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
@@ -11,6 +12,10 @@ import android.provider.Settings;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.SpannableString;
+import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.Switch;
@@ -38,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         UserGrantedPermission();
         CreateNotificationChannel();
 
-            headerTextView.setText(String.format("Hey %s, this is Color Breeze", getEmojiByUnicode(wavingHandEmojiUnicode)));
+        headerTextView.setText(String.format("Hey %s, this is Color Breeze", getEmojiByUnicode(wavingHandEmojiUnicode)));
         checkPermissionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -46,6 +51,19 @@ public class MainActivity extends AppCompatActivity {
                 {
                     Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
                     getApplicationContext().startActivity(intent);
+                } else {
+                    AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
+                    alert.setTitle("No permission");
+                    String message = "This app doesn't have access to the secure settings of " +
+                            "your device. Find out how to grant the correct permissions here: " +
+                            "<a href=\"https://reverp.github.io/ColorBreeze\">https://reverp.github.io/ColorBreeze</a>";
+                    alert.setMessage(Html.fromHtml(message));
+                    alert.setNegativeButton("Ok", null);
+
+                    AlertDialog dialog = alert.create();
+                    dialog.show();
+                    ((TextView)dialog.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
+
                 }
             }
         });
