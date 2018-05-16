@@ -1,6 +1,5 @@
 ---
 layout: post
-title: Settings permission
 ---
 
 # Grant secure settings permission
@@ -14,13 +13,7 @@ In order to make Color Breeze work it needs to have permission to the developer 
 
 ## Steps
 1. Connect your Android device to your computer
-2. Execute the following command in terminal / command prompt
-
-    `adb devices`
-
+2. Execute the following command in your terminal / command prompt:     `adb devices`
 3.  Make sure your device appears in the list and its current state is online.
-4.  Execute the following command to give Color Breeze the correct permissions
-
-    `adb shell pm grant com.reverp.colorbreeze android.permission.WRITE_SECURE_SETTINGS`
-
+4.  Execute `adb shell pm grant com.reverp.colorbreeze android.permission.WRITE_SECURE_SETTINGS`
 5. Click on 'Check permission' in Color Breeze which should work
