@@ -32,7 +32,8 @@ public class EnableGrayscaleService extends JobIntentService {
         intent.setAction(GrayscaleAlarmReceiver.DISABLE_GRAYSCALE_CODE);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
 
-        Notification.Builder builder = new Notification.Builder(this)
+         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            Notification.Builder builder = new Notification.Builder(this)
                 .setContentTitle("Grayscale mode activated")
                 .setContentText("Press here to deactivate and bring back your colors.")
                 .setSmallIcon(R.drawable.ic_ink)
@@ -40,14 +41,22 @@ public class EnableGrayscaleService extends JobIntentService {
                 .setAutoCancel(true)
                 .setOngoing(true);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             builder.setChannelId("channel1");
+            Notification runningNotification = builder.build();
+             runningNotification.flags |= Notification.FLAG_AUTO_CANCEL;
+            startForeground(1, runningNotification);
+        } else {
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
+                    .setContentTitle("Grayscale mode activated")
+                    .setContentText("Press here to deactivate and bring back your colors.")
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                    .setAutoCancel(true);
+
+            Notification runningNotification = builder.build();
+             runningNotification.flags |= Notification.FLAG_AUTO_CANCEL;
+            startForeground(1, runningNotification);
         }
 
-        Notification runningNotification = builder.build();
-        runningNotification.flags |= Notification.FLAG_AUTO_CANCEL;
-
-        startForeground(1, runningNotification);
         Settings.Secure.putInt(getContentResolver(), "accessibility_display_daltonizer", 0);
         Settings.Secure.putInt(getContentResolver(), "accessibility_display_daltonizer_enabled", 1);
 

@@ -1,6 +1,7 @@
 package com.reverp.colorbreeze;
 
 import android.Manifest;
+import android.app.ActivityManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
@@ -37,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         UserGrantedPermission();
         CreateNotificationChannel();
 
-        headerTextView.setText(String.format("Hey %s, this is Color Breeze", getEmojiByUnicode(wavingHandEmojiUnicode)));
+            headerTextView.setText(String.format("Hey %s, this is Color Breeze", getEmojiByUnicode(wavingHandEmojiUnicode)));
         checkPermissionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -48,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+        enableGrayscaleSwitch.setChecked(IsGrayscaled());
 
         enableGrayscaleSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -59,7 +61,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        enableGrayscaleSwitch.setChecked(IsGrayscaled());
     }
 
     private void CreateNotificationChannel() {
@@ -146,5 +147,16 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return enabled != 0;
+    }
+
+
+    private boolean isMyServiceRunning(Class<?> serviceClass, Context context) {
+        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
     }
 }
