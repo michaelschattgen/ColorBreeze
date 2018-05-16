@@ -30,7 +30,7 @@
         android:entries="@array/list_preference_entries"
         android:entryValues="@array/list_preference_entries"
         android:dependency="enable_switch"
-        android:key="multi_select_list_preference_1"
+        android:key="pref_selected_days"
         android:title="Select days" />
 
 
