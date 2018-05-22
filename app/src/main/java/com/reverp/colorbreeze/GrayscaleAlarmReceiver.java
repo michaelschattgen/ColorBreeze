@@ -1,6 +1,8 @@
 package com.reverp.colorbreeze;
 
 import android.app.ActivityManager;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -8,6 +10,7 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
@@ -24,6 +27,14 @@ public class GrayscaleAlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         this._context = context;
+        Log.d("Receiver", "onreceive"); // log to make sure that boot completed action is received
+
+        if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
+            Log.d("Boot", "completed"); // log to make sure that boot completed action is received
+
+            setGrayscaleAlarms(context);
+        }
+
 
         if(!IsSelectedDay())
         {
@@ -78,5 +89,48 @@ public class GrayscaleAlarmReceiver extends BroadcastReceiver {
         }
 
         return false;
+    }
+
+    private void setGrayscaleAlarms(Context mContext) {
+        AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(mContext, GrayscaleAlarmReceiver.class);
+        intent.setAction(GrayscaleAlarmReceiver.ENABLE_GRAYSCALE_CODE);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, 0, intent, 0);
+
+        Intent disableIntent = new Intent(mContext, GrayscaleAlarmReceiver.class);
+        disableIntent.setAction(GrayscaleAlarmReceiver.DISABLE_GRAYSCALE_CODE);
+        PendingIntent disablePendingIntent = PendingIntent.getBroadcast(mContext, 0, disableIntent, 0);
+
+        // Reset previous pending intent
+        alarmManager.cancel(pendingIntent);
+        alarmManager.cancel(disablePendingIntent);
+
+        // Set the alarm to start at approximately 08:00 morning.
+        Calendar beginCalendar = Calendar.getInstance();
+        beginCalendar.setTimeInMillis(System.currentTimeMillis());
+        beginCalendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(read("starttime_hour", "0")));
+        beginCalendar.set(Calendar.MINUTE, Integer.parseInt(read("starttime_minute", "0")));
+        beginCalendar.set(Calendar.SECOND, 0);
+
+        Calendar endCalendar = Calendar.getInstance();
+        endCalendar.setTimeInMillis(System.currentTimeMillis());
+        endCalendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(read("stoptime_hour", "0")));
+        endCalendar.set(Calendar.MINUTE, Integer.parseInt(read("stoptime_minute", "0")));
+        endCalendar.set(Calendar.SECOND, 0);
+
+        // If the scheduler date is passed, move scheduler time to tomorrow
+        if (System.currentTimeMillis() > beginCalendar.getTimeInMillis()) {
+            beginCalendar.add(Calendar.DAY_OF_YEAR, 1);
+            endCalendar.add(Calendar.DAY_OF_YEAR, 1);
+        }
+
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, beginCalendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, endCalendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, disablePendingIntent);
+
+    }
+
+    public String read(String valueKey, String valueDefault) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(_context);
+        return prefs.getString(valueKey, valueDefault);
     }
 }
