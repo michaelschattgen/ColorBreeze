@@ -91,11 +91,9 @@ public class MainActivity extends AppCompatActivity {
 
     public boolean UserGrantedPermission()
     {
-        int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_SECURE_SETTINGS);
-        boolean grantedPermission = permissionCheck == PackageManager.PERMISSION_GRANTED;
-        this.userGrantedPermission = grantedPermission;
+        this.userGrantedPermission = HasPermission();
 
-        if(grantedPermission)
+        if(userGrantedPermission)
         {
             enableGrayscaleSwitch.setVisibility(View.VISIBLE);
             subheaderTextView.setText(R.string.subheader_has_permission);
@@ -105,6 +103,14 @@ public class MainActivity extends AppCompatActivity {
             enableGrayscaleSwitch.setVisibility(View.INVISIBLE);
             checkPermissionButton.setText(getResources().getString(R.string.button_no_permission));
         }
+
+        return userGrantedPermission;
+    }
+
+    public boolean HasPermission()
+    {
+        int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_SECURE_SETTINGS);
+        boolean grantedPermission = permissionCheck == PackageManager.PERMISSION_GRANTED;
 
         return grantedPermission;
     }
@@ -136,10 +142,17 @@ public class MainActivity extends AppCompatActivity {
 
     public boolean IsGrayscaled()
     {
+        if(!HasPermission())
+        {
+            return false;
+        }
+
         int enabled;
-        try {
+        try
+        {
             enabled = Settings.Secure.getInt(getContentResolver(), "accessibility_display_daltonizer_enabled");
-        } catch (Settings.SettingNotFoundException e) {
+        } catch (Settings.SettingNotFoundException e)
+        {
             e.printStackTrace();
 
             Toast.makeText(this, "Can't get current grayscale state", Toast.LENGTH_SHORT).show();
