@@ -49,6 +49,10 @@ public class GrayscaleAlarmReceiver extends BroadcastReceiver {
         }
 
         if (actionString.equals(ENABLE_GRAYSCALE_CODE)) {
+            if(!IsEnabled()){
+                return;
+            }
+            
             serviceIntent = new Intent(context, EnableGrayscaleService.class);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 context.startForegroundService(serviceIntent);
@@ -75,6 +79,14 @@ public class GrayscaleAlarmReceiver extends BroadcastReceiver {
             }
         }
         return false;
+    }
+
+    private boolean IsEnabled()
+    {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this._context);
+        Boolean isEnabled = prefs.getBoolean("enable_switch", false);
+
+        return isEnabled;
     }
 
     private boolean IsSelectedDay()
