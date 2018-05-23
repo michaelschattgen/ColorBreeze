@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fancy="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:fancy="http://schemas.android.com/apk/res-auto"
     android:background="#f4f6f8"
-    android:padding="14dp"
-    tools:context="com.reverp.colorbreeze.MainActivity">
+    android:paddingTop="14dp"
+    android:paddingLeft="14dp"
+    android:paddingStart="14dp"
+    android:paddingRight="14dp"
+    android:paddingEnd="14dp"
+    tools:context="com.reverp.colorbreeze.MainActivity"
+    tools:layout_editor_absoluteY="25dp">
 
     <TextView
         android:id="@+id/tvHeader"
@@ -33,11 +38,11 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:gravity="center"
-        android:lineSpacingExtra="5sp"
+        android:lineSpacingExtra="8sp"
+        android:text="@string/subheader_no_permission"
         android:textAlignment="center"
         android:textColor="#303030"
         android:textSize="14sp"
-        android:text="@string/subheader_no_permission"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -61,7 +66,7 @@
         android:id="@+id/btnCheckPermission"
         android:layout_width="326dp"
         android:layout_height="49dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="56dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:paddingBottom="10dp"
@@ -86,18 +91,18 @@
         android:layout_height="20dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:text="(root support coming soon)"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnCheckPermission" />
+        app:layout_constraintTop_toBottomOf="@+id/tvSubheader" />
 
     <Switch
         android:id="@+id/swEnableGrayscale"
         android:layout_width="wrap_content"
         android:layout_height="23dp"
-        android:layout_marginBottom="20dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:text="Enable grayscale  "
@@ -106,5 +111,23 @@
         app:layout_constraintBottom_toTopOf="@+id/btnCheckPermission"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/adView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:visibility="visible"
+        ads:adSize="BANNER"
+        ads:adUnitId="ca-app-pub-9499836165206516/4578271043"
+        ads:layout_constraintHorizontal_bias="1.0"
+        ads:layout_constraintVertical_bias="1.0"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnCheckPermission" />
 
 </android.support.constraint.ConstraintLayout>

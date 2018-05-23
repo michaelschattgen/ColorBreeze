@@ -22,6 +22,10 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+
 import mehdi.sakout.fancybuttons.FancyButton;
 
 public class MainActivity extends AppCompatActivity {
@@ -78,6 +82,11 @@ public class MainActivity extends AppCompatActivity {
                     DisableGrayscale();
             }
         });
+
+        MobileAds.initialize(this, "ca-app-pub-9499836165206516~3588197975");
+        AdView mAdView = findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().addTestDevice("78184CD5062BF37A140AF21C857744BA").build();
+        mAdView.loadAd(adRequest);
 
     }
 
