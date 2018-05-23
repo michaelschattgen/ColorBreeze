@@ -15,6 +15,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
+import android.preference.MultiSelectListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.support.v7.app.ActionBar;
@@ -22,14 +23,18 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 import android.text.TextUtils;
+import android.util.SparseBooleanArray;
 import android.view.MenuItem;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.sql.Time;
+import java.text.DateFormatSymbols;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -147,6 +152,20 @@ public class SettingsActivity extends AppCompatPreferenceActivity{
                     return true;
                 }
             });
+
+            final MultiSelectListPreference selectedDaysPreference = (MultiSelectListPreference) findPreference("pref_selected_days");
+            String selectedDaysSummary = getSelectedDaysString(selectedDaysPreference.getValues());
+            selectedDaysPreference.setSummary(selectedDaysSummary);
+            selectedDaysPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    String selectedDaysSummary = getSelectedDaysString((Set<String>)newValue);
+                    selectedDaysPreference.setSummary(selectedDaysSummary);
+
+                    return true;
+                }
+            });
+
         }
 
         public String getTimeString(int selectedHour, int selectedMinute)
@@ -166,6 +185,25 @@ public class SettingsActivity extends AppCompatPreferenceActivity{
             return hourString + ":" + minuteString;
         }
 
+        private String getSelectedDaysString(Set<String> getValues)
+        {
+            String[] namesOfDays = { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
+
+            StringBuilder days = new StringBuilder();
+            for (String nameOfDay : namesOfDays ) {
+                if(getValues.contains(nameOfDay)) {
+                    if (days.length() > 0)
+                    {
+                        days.append(", ");
+                    }
+
+                    days.append(nameOfDay);
+                }
+            }
+
+            return days.toString();
+        }
+        
         public void setGrayscaleAlarms(Context mContext) {
             AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
             Intent intent = new Intent(mContext, GrayscaleAlarmReceiver.class);

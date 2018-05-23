@@ -71,6 +71,14 @@
         <item>Sunday</item>
     </string-array>
 
+    <string-array name="multi_select_list_preference_default_value">
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Sunday</item>
+    </string-array>
+
     <string-array name="list_preference_entry_values">
         <item>1</item>
         <item>2</item>
@@ -80,8 +88,6 @@
         <item>6</item>
         <item>7</item>
     </string-array>
-
-    <string-array name="multi_select_list_preference_default_value" />
 
     <string name="pref_title_system_sync_settings">System sync settings</string>
 
