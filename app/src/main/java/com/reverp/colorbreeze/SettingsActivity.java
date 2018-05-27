@@ -1,39 +1,19 @@
 package com.reverp.colorbreeze;
 
-import android.annotation.TargetApi;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.preference.EditTextPreference;
-import android.preference.ListPreference;
 import android.preference.MultiSelectListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
-import android.support.v7.app.ActionBar;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import android.preference.RingtonePreference;
-import android.text.TextUtils;
-import android.util.SparseBooleanArray;
-import android.view.MenuItem;
 import android.widget.TimePicker;
-import android.widget.Toast;
-
-import java.sql.Time;
-import java.text.DateFormatSymbols;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -56,8 +36,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity{
         SettingsFragment fragment = new SettingsFragment();
         fragment.setArguments(getIntent().getExtras());
         getFragmentManager().beginTransaction().replace(android.R.id.content, fragment).commit();
-
-        final Preference startTimePreference = findPreference("pref_start_time");
     }
 
 
@@ -86,7 +64,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity{
                         Intent disableIntent = new Intent(getActivity(), DisableGrayscaleService.class);
                         PendingIntent disablePendingIntent = PendingIntent.getService(getActivity(), 0, disableIntent, 0);
 
-                        // Reset previous pending intent
                         alarmManager.cancel(pendingIntent);
                         alarmManager.cancel(disablePendingIntent);
                     }
@@ -187,6 +164,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity{
 
         private String getSelectedDaysString(Set<String> getValues)
         {
+            // Easy and ugly fix to sort summary by weekday
             String[] namesOfDays = { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
 
             StringBuilder days = new StringBuilder();
@@ -214,11 +192,9 @@ public class SettingsActivity extends AppCompatPreferenceActivity{
             disableIntent.setAction(GrayscaleAlarmReceiver.DISABLE_GRAYSCALE_CODE);
             PendingIntent disablePendingIntent = PendingIntent.getBroadcast(mContext, 0, disableIntent, 0);
 
-            // Reset previous pending intent
             alarmManager.cancel(pendingIntent);
             alarmManager.cancel(disablePendingIntent);
 
-            // Set the alarm to start at approximately 08:00 morning.
             Calendar beginCalendar = Calendar.getInstance();
             beginCalendar.setTimeInMillis(System.currentTimeMillis());
             beginCalendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(read("starttime_hour", "0")));
@@ -231,20 +207,12 @@ public class SettingsActivity extends AppCompatPreferenceActivity{
             endCalendar.set(Calendar.MINUTE, Integer.parseInt(read("stoptime_minute", "0")));
             endCalendar.set(Calendar.SECOND, 0);
 
-            // If the scheduler date is passed, move scheduler time to tomorrow
             if (System.currentTimeMillis() > beginCalendar.getTimeInMillis()) {
                 beginCalendar.add(Calendar.DAY_OF_YEAR, 1);
             }
-            //if (Build.VERSION.SDK_INT >= 23) {
-                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, beginCalendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
-                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, endCalendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, disablePendingIntent);
-            //} else if (Build.VERSION.SDK_INT >= 19) {
-            //    alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, beginCalendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
-            //} else {
-            //    alarmManager.set(AlarmManager.RTC_WAKEUP, beginCalendar.getTimeInMillis(), pendingIntent);
-            //}
-            //alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, beginCalendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
-            //alarmManager.setRepeating (AlarmManager.RTC_WAKEUP, endCalendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, disablePendingIntent);
+
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, beginCalendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, endCalendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, disablePendingIntent);
         }
 
         public void save(String valueKey, String value) {

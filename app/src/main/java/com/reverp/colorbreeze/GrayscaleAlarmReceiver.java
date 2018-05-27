@@ -52,7 +52,7 @@ public class GrayscaleAlarmReceiver extends BroadcastReceiver {
             if(!IsEnabled()){
                 return;
             }
-            
+
             serviceIntent = new Intent(context, EnableGrayscaleService.class);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 context.startForegroundService(serviceIntent);

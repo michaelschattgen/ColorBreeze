@@ -93,13 +93,10 @@ public class MainActivity extends AppCompatActivity {
     private void CreateNotificationChannel() {
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-// The id of the channel.
         String id = "channel1";
 
-// The user-visible name of the channel.
         CharSequence name = "Background job notification";
 
-// The user-visible description of the channel.
         String description = "Notifications in this channel will only be used to ...";
 
         int importance = NotificationManager.IMPORTANCE_LOW;
@@ -111,9 +108,6 @@ public class MainActivity extends AppCompatActivity {
             mNotificationManager.createNotificationChannel(mChannel);
 
         }
-
-// Configure the notification channel.
-
     }
 
     public boolean UserGrantedPermission()
@@ -187,16 +181,5 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return enabled != 0;
-    }
-
-
-    private boolean isMyServiceRunning(Class<?> serviceClass, Context context) {
-        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (serviceClass.getName().equals(service.service.getClassName())) {
-                return true;
-            }
-        }
-        return false;
     }
 }
