@@ -95,8 +95,8 @@ public class GrayscaleAlarmReceiver extends BroadcastReceiver {
         Set<String> selectedDays = prefs.getStringSet("pref_selected_days", null);
 
         String todayString = new SimpleDateFormat("EEEE", Locale.ENGLISH).format(Calendar.getInstance().getTime());
-        if(!selectedDays.isEmpty())
-        {
+        
+        if (selectedDays != null && !selectedDays.isEmpty()) {
             return selectedDays.contains(todayString);
         }
 
