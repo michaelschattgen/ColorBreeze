@@ -48,16 +48,17 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         InitializeControls();
-        UserGrantedPermission();
+        UserGrantedPermission(false);
         CreateNotificationChannel();
 
         headerTextView.setText(String.format("Hey %s, this is Color Breeze", getEmojiByUnicode(wavingHandEmojiUnicode)));
         checkPermissionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(UserGrantedPermission())
+                if(UserGrantedPermission(true))
                 {
-                    Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
+                    Intent intent = new Intent(getApplication(), SettingsActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     getApplicationContext().startActivity(intent);
                 } else {
                     AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
@@ -114,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public boolean UserGrantedPermission()
+    public boolean UserGrantedPermission(boolean askForPermission)
     {
         this.userGrantedPermission = HasPermission();
 
@@ -124,9 +125,13 @@ public class MainActivity extends AppCompatActivity {
             subheaderTextView.setText(R.string.subheader_has_permission);
             checkPermissionButton.setText(getResources().getString(R.string.button_has_permission));
         } else {
-            subheaderTextView.setText(R.string.subheader_no_permission);
-            enableGrayscaleSwitch.setVisibility(View.INVISIBLE);
-            checkPermissionButton.setText(getResources().getString(R.string.button_no_permission));
+            userGrantedPermission = askForPermission && HasRootAccess();
+            if(!userGrantedPermission)
+            {
+                subheaderTextView.setText(R.string.subheader_no_permission);
+                enableGrayscaleSwitch.setVisibility(View.INVISIBLE);
+                checkPermissionButton.setText(getResources().getString(R.string.button_no_permission));
+            }
         }
 
         return userGrantedPermission;
@@ -187,7 +192,7 @@ public class MainActivity extends AppCompatActivity {
         return enabled != 0;
     }
 
-    public void CheckRoot() {
+    public boolean HasRootAccess() {
         Process p;
         try {
             p = Runtime.getRuntime().exec("su");
@@ -199,15 +204,19 @@ public class MainActivity extends AppCompatActivity {
                 p.waitFor();
                 if (p.exitValue() != 1) {
                     Log.d(this.getPackageName(), "success getting root");
+                    return true;
                 }
                 else {
                     Log.d(this.getPackageName(), "failing getting root");
+                    return false;
                 }
             } catch (InterruptedException e) {
                 Log.d(this.getPackageName(), "failing getting root");
+                return false;
             }
         } catch (IOException e) {
             Log.d(this.getPackageName(), "failing getting root");
+            return false;
         }
     }
 }
