@@ -16,6 +16,7 @@ import android.text.Html;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
+import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.Switch;
@@ -25,6 +26,9 @@ import android.widget.Toast;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
+
+import java.io.DataOutputStream;
+import java.io.IOException;
 
 import mehdi.sakout.fancybuttons.FancyButton;
 
@@ -181,5 +185,29 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return enabled != 0;
+    }
+
+    public void CheckRoot() {
+        Process p;
+        try {
+            p = Runtime.getRuntime().exec("su");
+            DataOutputStream su = new DataOutputStream(p.getOutputStream());
+            su.writeBytes("pm grant com.reverp.colorbreeze android.permission.WRITE_SECURE_SETTINGS\n");
+            su.writeBytes("exit\n");
+            su.flush();
+            try {
+                p.waitFor();
+                if (p.exitValue() != 1) {
+                    Log.d(this.getPackageName(), "success getting root");
+                }
+                else {
+                    Log.d(this.getPackageName(), "failing getting root");
+                }
+            } catch (InterruptedException e) {
+                Log.d(this.getPackageName(), "failing getting root");
+            }
+        } catch (IOException e) {
+            Log.d(this.getPackageName(), "failing getting root");
+        }
     }
 }
