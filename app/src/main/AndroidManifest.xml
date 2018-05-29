@@ -46,6 +46,16 @@
             android:name=".DisableGrayscaleService"
             android:enabled="true"
             android:exported="false" />
+
+        <service
+            android:name=".GrayscaleTileService"
+            android:icon="@drawable/ic_ink"
+            android:label="Grayscale"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>
