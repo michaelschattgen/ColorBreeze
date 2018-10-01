@@ -7,11 +7,9 @@ import android.os.Build;
 import android.provider.Settings;
 import android.service.quicksettings.Tile;
 import android.service.quicksettings.TileService;
-import android.support.annotation.RequiresApi;
-import android.support.v4.content.ContextCompat;
-import android.widget.Toast;
 
-import java.util.HashSet;
+import androidx.annotation.RequiresApi;
+import androidx.core.content.ContextCompat;
 
 @RequiresApi(api = Build.VERSION_CODES.N)
 public class GrayscaleTileService extends TileService {
