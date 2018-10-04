@@ -6,8 +6,8 @@ android {
         applicationId "com.reverp.colorbreeze"
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 6
-        versionName "1.4"
+        versionCode 7
+        versionName "1.4.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
