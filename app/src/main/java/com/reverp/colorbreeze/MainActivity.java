@@ -7,6 +7,7 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.text.Html;
@@ -14,6 +15,7 @@ import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     TextView subheaderTextView;
     FancyButton checkPermissionButton;
     Switch enableGrayscaleSwitch;
+    ImageView githubImageView;
 
     boolean userGrantedPermission;
 
@@ -58,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
                     alert.setTitle("No permission");
                     String message = "This app doesn't have access to the secure settings of " +
                             "your device. Find out how to grant the correct permissions here: " +
-                            "<a href=\"https://mschattgen.github.io/ColorBreeze\">https://mschattgen.github.io/ColorBreeze</a>";
+                            "<a href=\"https://michaelschattgen.github.io/ColorBreeze\">https://michaelschattgen.github.io/ColorBreeze</a>";
                     alert.setMessage(Html.fromHtml(message));
                     alert.setNegativeButton("Ok", null);
 
@@ -78,6 +81,18 @@ public class MainActivity extends AppCompatActivity {
                     EnableGrayscale();
                 else
                     DisableGrayscale();
+            }
+        });
+
+        githubImageView = findViewById(R.id.ivGithub);
+        githubImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String url = "https://github.com/michaelschattgen/ColorBreeze";
+
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url));
+                startActivity(i);
             }
         });
     }
