@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
                     alert.setTitle("No permission");
                     String message = "This app doesn't have access to the secure settings of " +
                             "your device. Find out how to grant the correct permissions here: " +
-                            "<a href=\"https://reverp.github.io/ColorBreeze\">https://reverp.github.io/ColorBreeze</a>";
+                            "<a href=\"https://mschattgen.github.io/ColorBreeze\">https://mschattgen.github.io/ColorBreeze</a>";
                     alert.setMessage(Html.fromHtml(message));
                     alert.setNegativeButton("Ok", null);
 
